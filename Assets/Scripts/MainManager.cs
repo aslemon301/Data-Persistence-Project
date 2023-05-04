@@ -12,6 +12,8 @@ public class MainManager : MonoBehaviour
 
     public Text ScoreText;
     public GameObject GameOverText;
+
+    [SerializeField] Text bestScoreText;
     
     private bool m_Started = false;
     private int m_Points;
@@ -36,6 +38,8 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+        RenewBestScoreText();
     }
 
     private void Update()
@@ -72,5 +76,16 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+
+        if (GameData.Instance.bestScore < m_Points)
+        {
+            GameData.Instance.NewScore(m_Points);
+            RenewBestScoreText();
+        }
+    }
+
+    void RenewBestScoreText()
+    {
+        bestScoreText.text = $"Best Score: {GameData.Instance.bestScoreUserName} : {GameData.Instance.bestScore}";
     }
 }
